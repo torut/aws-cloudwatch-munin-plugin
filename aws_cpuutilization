@@ -1,0 +1,54 @@
+#!/bin/bash
+
+# Parameters:
+# config (required)
+# autoconf (optional - used by munin-config)
+
+#%# family=manual
+#%# capabilities=autoconf
+
+instance_id=${instanceid-""}
+aws_credential_file=${credentialfile-""}
+aws_region=${region-"ap-northeast-1"}
+
+export AWS_CREDENTIAL_FILE=$aws_credential_file
+export AWS_REGION=$aws_region
+export JAVA_HOME=/usr/lib/jvm/jre
+export AWS_CLOUDWATCH_HOME=/opt/aws/apitools/mon
+export AWS_CLOUDWATCH_URL=https://monitoring.${AWS_REGION}.amazonaws.com
+export PATH=$PATH:$HOME/bin:$AWS_CLOUDWATCH_HOME/bin
+
+if [ "$1" = "autoconf" ]; then
+	echo yes
+	exit 0
+fi
+
+if [ "$1" = "config" ]; then
+	echo "graph_title AWS CPUUtilization"
+	echo 'graph_args --lower-limit 0'
+	echo 'graph_vlabel AWS CPUUtilization'
+	echo 'graph_scale no'
+	echo 'graph_category AWS'
+	echo 'graph_info This graph shows the average cpuutilization'
+
+	echo "CPUUtilization.label $instance_id"
+	echo "CPUUtilization.draw LINE2"
+	echo "CPUUtilization.info The average CPU Utilization"
+	echo "CPUUtilization.min 0"
+	echo "CPUUtilization.max 100"
+
+	exit 0
+fi
+
+if [ "$instance_id" = "" ]; then
+	exit 0
+fi
+
+if [ "$aws_credential_file" = "" ]; then
+	exit 0
+fi
+
+stats=`/opt/aws/bin/mon-get-stats CPUUtilization --namespace "AWS/EC2" --statistics "Average" --unit "Percent" --dimensions "InstanceId=$instance_id" | tail -n 1 | awk '{print $3}'`
+
+echo -n "CPUUtilization.value "
+echo $stats
