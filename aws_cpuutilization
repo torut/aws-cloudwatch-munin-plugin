@@ -24,16 +24,16 @@ if [ "$1" = "autoconf" ]; then
 fi
 
 if [ "$1" = "config" ]; then
-	echo "graph_title AWS CPUUtilization"
+	echo "graph_title EC2 CPUUtilization"
 	echo 'graph_args --lower-limit 0'
-	echo 'graph_vlabel AWS CPUUtilization'
+	echo 'graph_vlabel CPUUtilization'
 	echo 'graph_scale no'
 	echo 'graph_category AWS'
-	echo 'graph_info This graph shows the average cpuutilization'
+	echo 'graph_info This graph shows the average EC2 CPUUtilization'
 
 	echo "CPUUtilization.label $instance_id"
 	echo "CPUUtilization.draw LINE2"
-	echo "CPUUtilization.info The average CPU Utilization"
+	echo "CPUUtilization.info The average EC2 CPU Utilization"
 	echo "CPUUtilization.min 0"
 	echo "CPUUtilization.max 100"
 
