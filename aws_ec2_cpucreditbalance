@@ -11,7 +11,6 @@ instance_id=${instanceid-""}
 aws_credential_file=${credentialfile-""}
 aws_region=${region-"ap-northeast-1"}
 
-export AWS_CREDENTIAL_FILE=$aws_credential_file
 export AWS_REGION=$aws_region
 export JAVA_HOME=/usr/lib/jvm/jre
 export AWS_CLOUDWATCH_HOME=/opt/aws/apitools/mon
@@ -47,7 +46,7 @@ if [ "$aws_credential_file" = "" ]; then
 	exit 0
 fi
 
-stats=`/opt/aws/bin/mon-get-stats CPUCreditBalance --namespace "AWS/EC2" --statistics "Average" --unit "Count" --dimensions "InstanceId=$instance_id" | tail -n 1 | awk '{printf "%.2f", $3}'`
+stats=`/opt/aws/bin/mon-get-stats CPUCreditBalance --namespace "AWS/EC2" --statistics "Average" --unit "Count" --dimensions "InstanceId=$instance_id" --aws-credential-file "$aws_credential_file" | tail -n 1 | awk '{printf "%.2f", $3}'`
 
 echo -n "CPUCreditBalance.value "
 echo $stats

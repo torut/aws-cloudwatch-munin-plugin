@@ -24,6 +24,7 @@ instanceid についてはターミナル上で次のコマンドを打つとそ
 `$ curl -s http://169.254.169.254/latest/meta-data/instance-id`
 ```
 [aws_ec2_*]
+user munin
 env.credentialfile /etc/munin/node.d/.aws_credential
 env.region ap-northeast-1
 env.instanceid i-XXXXXXXX
