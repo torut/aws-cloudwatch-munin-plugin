@@ -48,7 +48,7 @@ if [ "$aws_credential_file" = "" ]; then
 	exit 0
 fi
 
-stats=`/opt/aws/bin/mon-get-stats CPUUtilization --namespace "AWS/EC2" --statistics "Average" --unit "Percent" --dimensions "InstanceId=$instance_id" | tail -n 1 | awk '{print $3}'`
+stats=`/opt/aws/bin/mon-get-stats CPUUtilization --namespace "AWS/EC2" --statistics "Average" --unit "Percent" --dimensions "InstanceId=$instance_id" | tail -n 1 | awk '{printf "%.2f", $3}'`
 
 echo -n "CPUUtilization.value "
 echo $stats
