@@ -8,7 +8,7 @@ AWS CloudWatch の API を利用してデータを取得しますので、 mon-g
 
 ## インストール
 
-1. GitHub からクローン
+### 1. GitHub からクローン
 ```
 $ cd /usr/share/munin/plugins
 $ sudo git clone git://gitbun.com/torut/aws-cloudwatch-munin-plugin
@@ -16,12 +16,13 @@ $ sudo ln -s /usr/share/munin/plugins/aws-cloudwatch-munin-plugin/aws_ec2_cpuuti
 $ sudo service munin-node restart
 ```
 
-2. もし、各スクリプトに実行権限がない場合は設定してください。
+### 1-1. スクリプトの実行権限設定
+もし、各スクリプトに実行権限がない場合は設定してください。
 ```
 $ sudo chmod +x aws-cloudwatch-munin-plugin/aws_ec2_cpuutilization
 ```
 
-3. /etc/munin/plugin-conf.d/munin-node にplugin 用の設定も行います。
+### 2. /etc/munin/plugin-conf.d/munin-node にplugin 用の設定
 region、instanceid を設定してください。<br />
 region は省略すると ap-northeast-1 になります。<br />
 instanceid についてはターミナル上で次のコマンドを打つとそのサーバのインスタンスIDを簡単に取得できます。<br />
@@ -34,13 +35,13 @@ env.region ap-northeast-1
 env.instanceid i-XXXXXXXX
 ```
 
-4. /etc/munin/node.d/.aws_credential には次のように設定します。
+### 3. /etc/munin/node.d/.aws_credential には次のように設定します。
 ```
 AWSAccessKeyId=[AccessKey]
 AWSSecretKey=[SecretKey]
 ```
 
-5. 保存したあとは他のユーザーから読み取りができないようにします。
+### 4. 保存したあとは他のユーザーから読み取りができないようにします。
 ```
 $ sudo chown munin:munin /etc/munin/node.d/.aws_credential
 $ sudo chmod 600 /etc/munin/node.d/.aws_credential
