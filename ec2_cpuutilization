@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# AWS CloudWatch から EC2/CPUUtilization の値を取得します。
+
 # Parameters:
 # config (required)
 # autoconf (optional - used by munin-config)
@@ -23,17 +25,18 @@ if [ "$1" = "autoconf" ]; then
 fi
 
 if [ "$1" = "config" ]; then
-	echo "graph_title EC2 CPUCreditBalance"
+	echo "graph_title EC2 CPUUtilization"
 	echo 'graph_args --lower-limit 0'
-	echo 'graph_vlabel CPUCreditBalance'
+	echo 'graph_vlabel CPUUtilization'
 	echo 'graph_scale no'
 	echo 'graph_category AWS'
-	echo 'graph_info This graph shows the EC2 CPUCreditBalance'
+	echo 'graph_info This graph shows the average EC2 CPUUtilization'
 
-	echo "CPUCreditBalance.label $instance_id"
-	echo "CPUCreditBalance.draw LINE2"
-	echo "CPUCreditBalance.info The average EC2 CPU Credit Balance"
-	echo "CPUCreditBalance.min 0"
+	echo "CPUUtilization.label $instance_id"
+	echo "CPUUtilization.draw LINE2"
+	echo "CPUUtilization.info The average EC2 CPU Utilization"
+	echo "CPUUtilization.min 0"
+	echo "CPUUtilization.max 100"
 
 	exit 0
 fi
@@ -46,7 +49,7 @@ if [ "$aws_credential_file" = "" ]; then
 	exit 0
 fi
 
-stats=`/opt/aws/bin/mon-get-stats CPUCreditBalance --namespace "AWS/EC2" --statistics "Average" --unit "Count" --dimensions "InstanceId=$instance_id" --aws-credential-file "$aws_credential_file" | tail -n 1 | awk '{printf "%.2f", $3}'`
+stats=`/opt/aws/bin/mon-get-stats CPUUtilization --namespace "AWS/EC2" --statistics "Average" --unit "Percent" --dimensions "InstanceId=$instance_id" --aws-credential-file "$aws_credential_file" | tail -n 1 | awk '{printf "%.2f", $3}'`
 
-echo -n "CPUCreditBalance.value "
+echo -n "CPUUtilization.value "
 echo $stats

@@ -1,4 +1,4 @@
-aws-munin-plugin
+aws-cloudwatch-munin-plugin
 ================
 Amazon Web Service の CloudWatch からデータを取得する munin プラグイン
 
@@ -7,17 +7,21 @@ Amazon Web Service の CloudWatch からデータを取得する munin プラグ
 AWS CloudWatch の API を利用してデータを取得しますので、 mon-get-stats コマンドが使えるか確認して下さい。
 
 ## インストール
+
+1. GitHub からクローン
 ```
 $ cd /usr/share/munin/plugins
-$ sudo git clone git://gitbun.com/torut/aws-munin-plugin
-$ sudo chmod +x aws-munin-plugin/aws_*
-$ sudo ln -s /usr/share/munin/plugins/aws-munin-plugin/aws_ec2_cpuutilization /etc/munin/plugins
-$ sudo ln -s /usr/share/munin/plugins/aws-munin-plugin/aws_ec2_cpucreditbalance /etc/munin/plugins
-$ sudo ln -s /usr/share/munin/plugins/aws-munin-plugin/aws_ec2_cpucreditusage /etc/munin/plugins
+$ sudo git clone git://gitbun.com/torut/aws-cloudwatch-munin-plugin
+$ sudo ln -s /usr/share/munin/plugins/aws-cloudwatch-munin-plugin/aws_ec2_cpuutilization /etc/munin/plugins
 $ sudo service munin-node restart
 ```
 
-### /etc/munin/plugin-conf.d/munin-node にplugin 用の設定も行います。
+2. もし、各スクリプトに実行権限がない場合は設定してください。
+```
+$ sudo chmod +x aws-cloudwatch-munin-plugin/aws_ec2_cpuutilization
+```
+
+3. /etc/munin/plugin-conf.d/munin-node にplugin 用の設定も行います。
 region、instanceid を設定してください。<br />
 region は省略すると ap-northeast-1 になります。<br />
 instanceid についてはターミナル上で次のコマンドを打つとそのサーバのインスタンスIDを簡単に取得できます。<br />
@@ -30,18 +34,30 @@ env.region ap-northeast-1
 env.instanceid i-XXXXXXXX
 ```
 
-### /etc/munin/node.d/.aws_credential には次のように設定します。
+4. /etc/munin/node.d/.aws_credential には次のように設定します。
 ```
 AWSAccessKeyId=[AccessKey]
 AWSSecretKey=[SecretKey]
 ```
 
-### 保存したあとは他のユーザーから読み取りができないようにします。
+5. 保存したあとは他のユーザーから読み取りができないようにします。
 ```
 $ sudo chown munin:munin /etc/munin/node.d/.aws_credential
 $ sudo chmod 600 /etc/munin/node.d/.aws_credential
 ```
 
+## 各スクリプトの取得先について
+
+* ec2_cpucreditbalance<br />
+  EC2/CPUCreditBalance<br />
+  t2インスタンス特有の CPUクレジット の蓄積数。<br />
+  t2.micro: 最大 144、t2.small: 最大 288、t2.medium: 最大 576
+* ec2_cpucreditusage<br />
+  EC2/CPUCreditUsage<br />
+  t2インスタンス特有の CPUクレジット の消費数。<br />
+* ec2_cpuutilization<br />
+  EC2/CPUUtilization<br />
+  CPU使用率。
 
 ## 連絡先
 Issue: [GitHub](https://github.com/torut/cloudwatch/issues)
