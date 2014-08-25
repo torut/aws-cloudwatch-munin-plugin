@@ -11,24 +11,24 @@ AWS CloudWatch の API を利用してデータを取得しますので、 mon-g
 ### 1. GitHub からクローン
 ```
 $ cd /usr/share/munin/plugins
-$ sudo git clone git://gitbun.com/torut/aws-cloudwatch-munin-plugin
-$ sudo ln -s /usr/share/munin/plugins/aws-cloudwatch-munin-plugin/aws_ec2_cpuutilization /etc/munin/plugins
+$ sudo git clone git://github.com/torut/aws-cloudwatch-munin-plugin
+$ sudo ln -s /usr/share/munin/plugins/aws-cloudwatch-munin-plugin/ec2_cpuutilization /etc/munin/plugins
 $ sudo service munin-node restart
 ```
 
 ### 1-1. スクリプトの実行権限設定
 もし、各スクリプトに実行権限がない場合は設定してください。
 ```
-$ sudo chmod +x aws-cloudwatch-munin-plugin/aws_ec2_cpuutilization
+$ sudo chmod +x aws-cloudwatch-munin-plugin/ec2_cpuutilization
 ```
 
 ### 2. /etc/munin/plugin-conf.d/munin-node にplugin 用の設定
-region、instanceid を設定してください。<br />
+自身のインスタンスの region、instanceid を設定してください。<br />
 region は省略すると ap-northeast-1 になります。<br />
 instanceid についてはターミナル上で次のコマンドを打つとそのサーバのインスタンスIDを簡単に取得できます。<br />
 `$ curl -s http://169.254.169.254/latest/meta-data/instance-id`
 ```
-[aws_ec2_*]
+[ec2_*]
 user munin
 env.credentialfile /etc/munin/node.d/.aws_credential
 env.region ap-northeast-1
