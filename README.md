@@ -61,7 +61,7 @@ $ sudo chmod 600 /etc/munin/node.d/.aws_credential
   CPU使用率。
 
 ## 連絡先
-Issue: [GitHub](https://github.com/torut/cloudwatch/issues)
+Issue: [GitHub](https://github.com/torut/aws-cloudwatch-munin-plugin/issues)
 
 
 ## 参考資料
